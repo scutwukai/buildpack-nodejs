@@ -109,6 +109,9 @@ install_npm() {
     version="5.x.x"
   fi
 
+  # use tencent npm mirror
+  npm config set registry http://mirrors.cloud.tencent.com/npm/
+
   if [ "$version" == "" ]; then
     echo "Using default npm version: $npm_version"
   elif [[ "$npm_version" == "$version" ]]; then
