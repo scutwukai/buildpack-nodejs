@@ -80,35 +80,18 @@ install_yarn() {
 install_nodejs() {
   local version=${1:-12.x}
   local dir="${2:?}"
-  local code os cpu resolve_result
+  local os cpu
 
   os=$(get_os)
   cpu=$(get_cpu)
 
-  if [[ -n "$NODE_BINARY_URL" ]]; then
-    url="$NODE_BINARY_URL"
-    echo "Downloading and installing node from $url"
-  else
-    echo "Resolving node version $version..."
-    resolve_result=$(resolve node "$version" || echo "failed")
-
-    read -r number url < <(echo "$resolve_result")
-
-    if [[ "$resolve_result" == "failed" ]]; then
-      fail_bin_install node "$version"
-    fi
-
-    echo "Downloading and installing node $number..."
+  if [ ! -f $CACHE_DIR/node.tar.gz ]; then
+    echo "Unable to download node" && false
   fi
 
-  code=$(curl "$url" -L --silent --fail --retry 5 --retry-max-time 15 -o /tmp/node.tar.gz --write-out "%{http_code}")
-
-  if [ "$code" != "200" ]; then
-    echo "Unable to download node: $code" && false
-  fi
-  tar xzf /tmp/node.tar.gz -C /tmp
+  tar xzf $CACHE_DIR/node.tar.gz -C /tmp
   rm -rf "${dir:?}"/*
-  mv /tmp/node-v"$number"-"$os"-"$cpu"/* "$dir"
+  mv /tmp/node-v*-"$os"-"$cpu"/* "$dir"
   chmod +x "$dir"/bin/*
 }
 
