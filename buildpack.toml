@@ -1,0 +1,12 @@
+[buildpack]
+name = "Node.js"
+
+  [publish.Ignore]
+  files = [
+      "etc/",
+      "test/",
+      "spec/",
+      ".github/",
+      ".travis.yml",
+      "makefile"
+  ]
