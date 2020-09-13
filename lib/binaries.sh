@@ -52,6 +52,9 @@ install_yarn() {
   fi
   chmod +x "$dir"/bin/*
 
+  # use tencent npm mirror
+  yarn config set registry http://mirrors.cloud.tencent.com/npm/
+
   if $YARN_2; then
     echo "Using yarn $(yarn --version)"
   else
